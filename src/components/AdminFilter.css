@@ -1,0 +1,13 @@
+.btn:hover {
+  color: lightgray !important;
+  background-color: black !important;
+}
+
+.btn {
+  color: white !important;
+  background-color: darkred !important;
+}
+
+.favorieten {
+  text-decoration: none; /* Remove the underline */
+}

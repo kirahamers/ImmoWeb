@@ -1,25 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {
+  BrowserRouter,
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import { Provider } from "react-redux";
+import AdminFilter from "./components/AdminFilter";
+import Filter from "./components/Filter";
+import LogIn from "./components/LogIn";
+import LogOut from "./components/LogOut";
+import Navigation from "./components/Navigation";
+import NavigationAdmin from "./components/NavigationAdmin";
+import AddPand from "./components/AddPand";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Homepage from "./pages/Homepage";
+import HuisDetailPage from "./pages/HuisDetailPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import AppLayout from "./navigation/AppLayout";
+import FavoritesPage from "./pages/FavoritesPage";
 
+const browserRouter = createBrowserRouter([
+  {
+    element: <AppLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Homepage />,
+      },
+      {
+        path: "favorites",
+        element: <FavoritesPage />,
+      },
+      {
+        path: "huizen",
+        element: <Homepage />,
+      },
+      {
+        path: "huizen/:id",
+        element: <HuisDetailPage />,
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />,
+      },
+    ],
+  },
+]);
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  return <RouterProvider router={browserRouter}></RouterProvider>;
 }
 
 export default App;
