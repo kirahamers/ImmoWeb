@@ -18,6 +18,8 @@ import HuisDetailPage from "./pages/HuisDetailPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import AppLayout from "./navigation/AppLayout";
 import FavoritesPage from "./pages/FavoritesPage";
+import AdminPage from "./pages/AdminPage";
+import AdminHuisDetailPage from "./pages/AdminHuisDetailPage";
 
 const browserRouter = createBrowserRouter([
   {
@@ -42,6 +44,22 @@ const browserRouter = createBrowserRouter([
       {
         path: "*",
         element: <NotFoundPage />,
+      },
+      {
+        path: "login",
+        element: <LogIn />,
+      },
+      {
+        path: "admin",
+        element: <AdminPage />,
+      },
+      {
+        path: "adminhuizen",
+        element: <AdminPage />,
+      },
+      {
+        path: "adminhuizen/:id",
+        element: <AdminHuisDetailPage />,
       },
     ],
   },

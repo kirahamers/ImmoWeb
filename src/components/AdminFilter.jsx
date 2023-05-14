@@ -13,14 +13,7 @@ const AdminFilter = () => {
                     Voeg pand toe
                 </button>
                 </Link>
-                &nbsp;
-                <button className="btn px-4  rounded-full ">
-                    Bewerk pand
-                </button>
-                &nbsp;
-                <button className="btn px-4 rounded-full ">
-                    Verwijder pand
-                </button>
+                
         </nav>
     </header>
   )
