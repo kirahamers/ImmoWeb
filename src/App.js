@@ -20,6 +20,7 @@ import AppLayout from "./navigation/AppLayout";
 import FavoritesPage from "./pages/FavoritesPage";
 import AdminPage from "./pages/AdminPage";
 import AdminHuisDetailPage from "./pages/AdminHuisDetailPage";
+import TypePandenComponent from "./components/TypePanden";
 
 const browserRouter = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ const browserRouter = createBrowserRouter([
       {
         path: "adminhuizen/:id",
         element: <AdminHuisDetailPage />,
+      },
+      {
+        path: "typepanden",
+        element: <TypePandenComponent />,
       },
     ],
   },
