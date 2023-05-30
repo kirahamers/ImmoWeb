@@ -19,7 +19,7 @@ const Navigation = () => {
             <Link to="/login">
             <button className="px-4 text-red-500 mt-2 body-font font-poppins">LogIn</button>
             </Link>
-            <Link to="/typepanden">
+            <Link to="/panden">
             <button className="px-4 text-red-500 mt-2 body-font font-poppins">TypePanden</button>
             </Link>
             <input
