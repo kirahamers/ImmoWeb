@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import NavigationAdmin from "../components/NavigationAdmin";
 import axios from "axios";
-
-const huizenData = require("../utils/huizen.json");
+import { Link } from "react-router-dom";
 
 const AdminHuisDetailPage = () => {
   const { id } = useParams();
@@ -85,9 +84,9 @@ const AdminHuisDetailPage = () => {
       <p>
         <strong>Beschrijving:</strong> {huis.beschrijving}
       </p>
-      <button className="btn px-4  rounded-full ">
-                    Bewerk pand
-                </button>
+      <Link to={`/admin/huizen/${id}/bewerken`} className="btn px-4 rounded-full">
+          Bewerk pand
+        </Link>
                 &nbsp;
                 <button className="btn px-4 rounded-full ">
                     Verwijder pand

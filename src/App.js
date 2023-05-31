@@ -20,6 +20,7 @@ import AppLayout from "./navigation/AppLayout";
 import FavoritesPage from "./pages/FavoritesPage";
 import AdminPage from "./pages/AdminPage";
 import AdminHuisDetailPage from "./pages/AdminHuisDetailPage";
+import EditPand from "./components/EditPand";
 
 const browserRouter = createBrowserRouter([
   {
@@ -68,6 +69,10 @@ const browserRouter = createBrowserRouter([
       {
         path: "addpand",
         element: <AddPand />,
+      },
+      {
+        path: "/admin/huizen/:id/bewerken",
+        element: <EditPand />,
       },
     ],
   },
