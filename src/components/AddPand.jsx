@@ -4,8 +4,9 @@ import NavigationAdmin from './NavigationAdmin';
 
 const AddPand = () => {
   const [type, setType] = useState('');
+  const [regioOptions, setRegioOptions] = useState([]);
   const [typePanden, setTypePanden] = useState([]);
-  const [regio, setRegio] = useState([]);
+  const [regio, setRegio] = useState('');
   const [straat, setStraat] = useState('');
   const [huisnummer, setHuisnummer] = useState('');
   const [bus, setBus] = useState('');
@@ -17,6 +18,26 @@ const AddPand = () => {
   const [beschrijving, setBeschrijving] = useState('');
   const [fotoUrl, setFotoUrl] = useState('');
 
+  const handlePostcodeChange = (event) => {
+    const parsedPostcode = parseInt(event.target.value);
+    setPostcode(parsedPostcode);
+  };
+  
+  const handleOppervlakteChange = (event) => {
+    const parsedOppervlakte = parseInt(event.target.value);
+    setOppervlakte(parsedOppervlakte);
+  };
+  
+  const handlePrijsChange = (event) => {
+    const parsedPrijs = parseInt(event.target.value);
+    setPrijs(parsedPrijs);
+  };
+  
+  const handleAantalKamersChange = (event) => {
+    const parsedAantalKamers = parseInt(event.target.value);
+    setAantalKamers(parsedAantalKamers);
+  };
+  
   useEffect(() => {
     fetchTypePanden();
   }, []);
@@ -32,7 +53,8 @@ const AddPand = () => {
   };
 
   const handleTypeChange = (event) => {
-    setType(event.target.value);
+    const selectedType = typePanden.find((typePand) => typePand.id === parseInt(event.target.value));
+    setType(selectedType);
   };
 
   useEffect(() => {
@@ -43,17 +65,18 @@ const AddPand = () => {
     try {
       const response = await fetch('/regio');
       const data = await response.json();
-      setRegio(data);
+      setRegioOptions(data);
     } catch (error) {
       console.error('Fout bij het ophalen van regios:', error);
     }
   };
   
   const handleRegioChange = (event) => {
-    setRegio(event.target.value);
+    const selectedRegio = regioOptions.find((regioOption) => regioOption.id === parseInt(event.target.value));
+    setRegio(selectedRegio);
   };
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     const newPand = {
       straat,
       huisnummer,
@@ -64,16 +87,13 @@ const AddPand = () => {
       aantalKamers,
       oppervlakte,
       beschrijving,
-      typeId: type,
-      regioId: regio,
+      typeId: type.id,
+      regioId: regio.id,
       fotoUrl,
     };
 
-    createPand(newPand);
-  };
-
-  const createPand = async (newPand) => {
     try {
+      // Maak het nieuwe pand aan
       const response = await fetch('/panden', {
         method: 'POST',
         headers: {
@@ -83,13 +103,44 @@ const AddPand = () => {
       });
 
       if (response.ok) {
-        // Het nieuwe pand is succesvol aangemaakt
-        console.log('Nieuw pand is aangemaakt:', newPand);
+        // Haal het aangemaakte pand op uit de respons
+        const createdPand = await response.json();
+
+        // Maak een nieuw afbeeldingsobject aan
+        const newAfbeelding = {
+          url: fotoUrl,
+          pandId: createdPand.id, // Gebruik de ID van het juist aangemaakte pand
+        };
+
+        // Stuur het nieuwe afbeeldingsobject naar de server
+        await createAfbeelding(newAfbeelding);
+
+        console.log('Nieuw pand is aangemaakt:', createdPand);
       } else {
         console.error('Fout bij het aanmaken van het nieuwe pand:', response.status);
       }
     } catch (error) {
       console.error('Fout bij het aanmaken van het nieuwe pand:', error);
+    }
+  };
+
+  const createAfbeelding = async (newAfbeelding) => {
+    try {
+      const response = await fetch('/afbeeldingen', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newAfbeelding),
+      });
+
+      if (response.ok) {
+        console.log('Nieuwe afbeelding is aangemaakt:', newAfbeelding);
+      } else {
+        console.error('Fout bij het aanmaken van de nieuwe afbeelding:', response.status);
+      }
+    } catch (error) {
+      console.error('Fout bij het aanmaken van de nieuwe afbeelding:', error);
     }
   };
 
@@ -137,7 +188,7 @@ const AddPand = () => {
             size="10"
             type="text"
             value={postcode}
-            onChange={(event) => setPostcode(event.target.value)}
+            onChange={handlePostcodeChange}
           />
           &nbsp;
           <p className="body-font font-poppins fw-bold mt-3">Gemeente</p> &nbsp;
@@ -151,28 +202,28 @@ const AddPand = () => {
         </div>
 
         <div className="form-group">
-          <p className="body-font font-poppins fw-bold mt-3">Regio</p> &nbsp;
-          <select
-            className='border rounded-lg'
-            value={regio}
-            onChange={handleRegioChange}
-          >
-            <option value=''>Selecteer een regio</option>
-            {typePanden.map((regio) => (
-              <option key={regio.id} value={regio.id}>
-                {regio.naam}
-              </option>
-            ))}
-          </select>
-        </div>
+      <p className="body-font font-poppins fw-bold mt-3">Regio</p> &nbsp;
+      <select
+        className='border rounded-lg'
+        value={regio}
+        onChange={handleRegioChange}
+      >
+        <option value=''>Selecteer een regio</option>
+        {regioOptions.map((regioOption) => (
+          <option key={regioOption.id} value={regioOption.id}>
+            {regioOption.naam}
+          </option>
+        ))}
+      </select>
+    </div>
 
         <div className="form-group">
           <p className="body-font font-poppins fw-bold mt-3">Prijs</p> &nbsp;
           <input
-            className='border rounded-lg'
+           className='border rounded-lg'
             type="text"
             value={prijs}
-            onChange={(event) => setPrijs(event.target.value)}
+            onChange={handlePrijsChange}
           />
         </div>
 
@@ -182,7 +233,7 @@ const AddPand = () => {
             className='border rounded-lg'
             type="text"
             value={oppervlakte}
-            onChange={(event) => setOppervlakte(event.target.value)}
+            onChange={handleOppervlakteChange}
           />
         </div>
 
@@ -209,7 +260,7 @@ const AddPand = () => {
             size="2"
             type="text"
             value={aantalKamers}
-            onChange={(event) => setAantalKamers(event.target.value)}
+            onChange={handleAantalKamersChange}
           />
         </div>
 
