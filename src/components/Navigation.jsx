@@ -19,9 +19,6 @@ const Navigation = () => {
             <Link to="/login">
             <button className="px-4 text-red-500 mt-2 body-font font-poppins">LogIn</button>
             </Link>
-            <Link to="/panden">
-            <button className="px-4 text-red-500 mt-2 body-font font-poppins">TypePanden</button>
-            </Link>
             <input
                     type="text"
                     className="block w-full px-4 py-2 text-red-700 bg-white border rounded-full focus:border-red-500 focus:ring-red-300 focus:outline-none focus:ring focus:ring-opacity-40"

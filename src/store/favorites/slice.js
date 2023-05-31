@@ -1,33 +1,39 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = [];
+
 const favoritesSlice = createSlice({
-  // number, string, arrays, objecten,...
-  initialState: [],
   name: "favorites",
+  initialState,
   reducers: {
     add: (state, action) => {
-      const foundIndex = state.findIndex(
-        (stateHuis) => stateHuis.id === action.payload.id
-      );
+      const foundIndex = state.findIndex((h) => h.id === action.payload.id);
 
       if (foundIndex === -1) {
-        // mutable door IMMER package
         state.push(action.payload);
       }
-      //return [...state, action.payload];
     },
     remove: (state, action) => {
-      //TODO: implementeer remove
-      const newArray = state.filter(
-        (stateHuis) => stateHuis.id !== action.payload
+      console.log("Favorites before removal:", state);
+
+      const filteredFavorites = state.filter(
+        (favorite) => favorite.id !== action.payload
       );
-      return newArray;
+      console.log("Filtered favorites:", filteredFavorites);
+
+      return filteredFavorites;
     },
+
     clear: (state, action) => {
-      return [];
+      state.favorites = [];
+    },
+    updateAfbeeldingen: (state, action) => {
+      state.afbeeldingen = action.payload;
     },
   },
 });
 
 export const { reducer } = favoritesSlice;
-export const { add, remove } = favoritesSlice.actions;
+export const { add, remove, updateAfbeeldingen } = favoritesSlice.actions;
+
+export default favoritesSlice.reducer;

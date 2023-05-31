@@ -5,7 +5,6 @@ import Navigation from "../components/Navigation";
 const AppLayout = () => {
   return (
     <>
-      <Navigation />
       <Outlet />
     </>
   );

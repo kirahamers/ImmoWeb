@@ -5,6 +5,7 @@ import { add } from '../store/favorites/slice';
 import { useDispatch } from 'react-redux';
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import axios from "axios";
+import Navigation from '../components/Navigation';
 
 const huizenData = require('../utils/huizen.json');
 
@@ -15,6 +16,8 @@ const Homepage = () => {
   const [favorites, setFavorites] = useState([]);
 
   const handleHeartClick = (event, h) => {
+    console.log('Favorites before click:', favorites);
+    console.log('Huis before click:', h);
     event.preventDefault();
     event.stopPropagation();
 
@@ -84,6 +87,7 @@ const Homepage = () => {
 
   return (
     <>
+          <Navigation />
       <Filter></Filter>
       <div className="p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 justify-items-center gap-4">

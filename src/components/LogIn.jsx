@@ -2,10 +2,12 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Dropdown from "react-bootstrap/Dropdown";
 import { Link } from 'react-router-dom';
+import Navigation from '../components/Navigation';
 
 const LogIn = () => {
   return (
-
+    <>
+<Navigation/>
 <div className='text-center mt-4'>
         <h4 className="body-font font-poppins fw-bold">Log in:</h4>
         <p></p>
@@ -21,6 +23,7 @@ const LogIn = () => {
                 </button>
         </Link>
         </div>
+        </>
   )
 }
 

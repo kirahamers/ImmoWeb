@@ -1,21 +1,28 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { reducer as favoritesReducer } from "./favorites/slice";
 import { combineReducers } from "@reduxjs/toolkit";
 import { loadState, saveState } from "./favorites/localStorage";
 import { throttle } from "lodash";
+import favoritesReducer from "./favorites/slice";
 
-//combineren van ozne reducers
+// Combineren van onze reducers
 const rootReducer = combineReducers({
   favorites: favoritesReducer,
 });
 
-//opvragen van de state uit onze localStorage
+// Opvragen van de state uit onze localStorage
 const loadedState = loadState();
 
-export const store = configureStore({
+const store = configureStore({
   reducer: rootReducer,
-  //onze state die we in de localstorage hadden staan meegeven aan onze store
+  // Onze state die we in de localstorage hadden staan meegeven aan onze store
   preloadedState: loadedState,
 });
 
-store.subscribe(throttle(() => saveState(store.getState()), 1000));
+// Abonneer op store wijzigingen en gebruik throttling om het opslaan van de state te beperken
+store.subscribe(
+  throttle(() => {
+    saveState(store.getState().favorites); // Alleen de favorieten opslaan in de local storage
+  }, 1000)
+);
+
+export default store;

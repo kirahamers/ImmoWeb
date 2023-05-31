@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import Navigation from "../components/Navigation";
 
 const HuisDetailPage = () => {
   const { id } = useParams();
@@ -53,6 +54,8 @@ const HuisDetailPage = () => {
   }
 
   return (
+    <>
+    <Navigation />
     <div className="flex flex-col items-center mt-8">
       <h1 className="text-2xl mb-4 text-red-700">House {huis.id}</h1>
       {afbeeldingen.length > 0 && (
@@ -87,6 +90,7 @@ const HuisDetailPage = () => {
         Terug
       </button>
     </div>
+    </>
   );
 };
 
