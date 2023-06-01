@@ -10,6 +10,7 @@ const HuisDetailPage = () => {
   const [huis, setHuis] = useState(null);
   const [afbeeldingen, setAfbeeldingen] = useState([]);
   const [pandType, setPandType] = useState("");
+  const [regio, setRegio] = useState("");
 
   useEffect(() => {
     fetchHuis();
@@ -21,6 +22,7 @@ const HuisDetailPage = () => {
       const response = await axios.get(`/panden/${id}`);
       setHuis(response.data);
       fetchPandType(response.data);
+      fetchRegio(response.data);
       fetchAfbeeldingen(response.data);
     } catch (error) {
       console.error(error);
@@ -36,6 +38,15 @@ const HuisDetailPage = () => {
       } catch (error) {
         console.error(error);
       }
+    }
+  };
+
+  const fetchRegio = async (data) => {
+    try {
+      const response = await axios.get(`/regio/${data.regioId}`);
+      setRegio(response.data.naam);
+    } catch (error) {
+      console.error(error);
     }
   };
   
@@ -57,7 +68,7 @@ const HuisDetailPage = () => {
     <>
     <Navigation />
     <div className="flex flex-col items-center mt-8">
-      <h1 className="text-2xl mb-4 text-red-700">House {huis.id}</h1>
+    <h1 className="text-2xl mb-4 text-red-700"> {huis.beschrijving}</h1>
       {afbeeldingen.length > 0 && (
         <img
           className="w-70 h-64 rounded mb-4"
@@ -66,23 +77,38 @@ const HuisDetailPage = () => {
         />
       )}
       <p>
-        <strong>Gemeente:</strong> {huis.gemeente}
+          <strong>Regio:</strong> {regio}
       </p>
+        <p>
+          <strong>Straat:</strong> {huis.straat}
+        </p>
+        <p>
+          <strong>Huisnummer:</strong> {huis.huisnummer}
+        </p>
+        <p>
+          <strong>Bus:</strong> {huis.bus}
+        </p>
+        <p>
+          <strong>Postcode:</strong> {huis.postcode}
+        </p>
       <p>
-        <strong>Prijs:</strong> €{huis.prijs}
-      </p>
-      <p>
-        <strong>Type:</strong> {pandType}
-      </p>
-      <p>
-        <strong>Aantal kamers:</strong> {huis.aantalKamers}
-      </p>
-      <p>
-        <strong>Oppervlakte:</strong> {huis.oppervlakte} m²
-      </p>
-      <p>
-        <strong>Beschrijving:</strong> {huis.beschrijving}
-      </p>
+          <strong>Gemeente:</strong> {huis.gemeente}
+        </p>
+        <p>
+          <strong>Prijs:</strong> €{huis.prijs}
+        </p>
+        <p>
+          <strong>Type:</strong> {pandType}
+        </p>
+        <p>
+          <strong>Aantal kamers:</strong> {huis.aantalKamers}
+        </p>
+        <p>
+          <strong>Oppervlakte:</strong> {huis.oppervlakte} m²
+        </p>
+        <p>
+          <strong>Beschrijving:</strong> {huis.beschrijving}
+        </p>
       <button
         onClick={() => navigate(-1)}
         className="px-4 py-2 mt-4 bg-red-700 text-white rounded hover:bg-red-800"

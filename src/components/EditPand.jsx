@@ -22,6 +22,7 @@ const EditPand = () => {
   const [regioOptions, setRegioOptions] = useState([]);
   const [typePanden, setTypePanden] = useState([]);
   const [afbeeldingen, setAfbeeldingen] = useState([]);
+  const [IsVerkochtVerhuurd, setIsVerkochtVerhuurd] = useState(false);
 
   useEffect(() => {
     fetchPand();
@@ -43,6 +44,7 @@ const EditPand = () => {
       setBeschrijving(pand.beschrijving);
       setRegio({ id: pand.regioId });
       setType({ id: pand.typeId });
+      setIsVerkochtVerhuurd(pand.IsVerkochtVerhuurd);
   
       fetchAfbeeldingen(pand);
     } catch (error) {
@@ -124,11 +126,13 @@ const EditPand = () => {
         beschrijving,
         regioId: regio.id,
         typeId: type.id,
+        updatedAt: new Date().toISOString(),
+        IsVerkochtVerhuurd,
       };
 
       await axios.put(`/panden/${id}`, updatedPand);
 
-      navigate(`/admin/huizen/${id}`);
+      navigate(`/adminhuizen/${id}`);
     } catch (error) {
       console.error(error);
     }
@@ -165,6 +169,16 @@ const EditPand = () => {
       <div className="ml-10 mt-3">
         <h4 className="body-font font-poppins fw-bold">Pand bewerken</h4>
         <p></p>
+        <label className="body-font font-poppins fw-bold mt-3">
+                  Verkocht/Verhuurd:&nbsp;
+                  <input
+          type="checkbox"
+          checked={IsVerkochtVerhuurd}
+          onChange={(e) => setIsVerkochtVerhuurd(e.target.checked)}
+        />
+        </label>
+
+        <br />
         <div className="form-group">
           <p className="body-font font-poppins fw-bold mt-3">Straat</p> &nbsp;
           <input
@@ -266,8 +280,6 @@ const EditPand = () => {
                 </option>
             ))}
             </select>
-
-
         </div>
 
         <div className="form-group">
@@ -306,7 +318,7 @@ const EditPand = () => {
 
         {fotoUrl && (
           <div className="form-group">
-            <p className="body-font font-poppins fw-bold mt-3">Preview</p>
+            <p className="body-font font-poppins fw-bold mt-3">Preview</p> &nbsp;
 
             <img src={fotoUrl} alt="Pand" style={{ maxWidth: "400px" }} />
 
