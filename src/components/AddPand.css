@@ -12,3 +12,8 @@
   box-sizing: border-box !important;
   resize: vertical !important;
 }
+
+.required {
+  color: red;
+  margin-left: 5px;
+}

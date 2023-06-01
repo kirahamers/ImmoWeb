@@ -60,7 +60,7 @@ const HuisDetailPage = () => {
                 url += `${kamersMin ? '&' : ''}kamersMax=${kamersMax}`;
               }
             }
-            
+
       const response = await axios.get(url);
       setHuis(response.data);
       fetchPandType(response.data);
@@ -118,6 +118,9 @@ const HuisDetailPage = () => {
           alt={huis.beschrijving}
         />
       )}
+      {huis.IsVerkochtVerhuurd && (
+                <p className="text-red-700 font-semibold rounded-full"> DIT PAND IS VERKOCHT/VERHUURD </p>
+              )}
       <p>
           <strong>Regio:</strong> {regio}
       </p>

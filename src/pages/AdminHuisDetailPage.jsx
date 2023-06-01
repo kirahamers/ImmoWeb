@@ -101,6 +101,10 @@ const AdminHuisDetailPage = () => {
             alt={huis.beschrijving}
           />
         )}
+        {huis.IsVerkochtVerhuurd && (
+                <p className="text-red-700 font-semibold rounded-full"> DIT PAND IS VERKOCHT/VERHUURD </p>
+              )}
+      <p></p>
         <p>
           <strong>Regio:</strong> {regio}
         </p>

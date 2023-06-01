@@ -65,6 +65,9 @@ const FavoritesPage = () => {
             <p className="text-center -mt-3 text-gray-400">
               {h.gemeente}, €{h.prijs}
             </p>
+            {h.IsVerkochtVerhuurd && (
+                <p className="absolute top-2 right-2 text-black bg-red-700 font-semibold rounded-full"> VERKOCHT/VERHUURD! </p>
+              )}
             <button onClick={(event) => verwijderClick(event, h)}>
               Verwijder
             </button>

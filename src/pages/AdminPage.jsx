@@ -96,13 +96,16 @@ const Adminpage = () => {
             >
               {afbeeldingen[pand.id] && (
                 <img
-                  className="w-full h-3/4 object-cover"
+                  className="w-full h-full object-cover"
                   src={afbeeldingen[pand.id][0]} // Gebruik de eerste afbeelding van het pand
                   alt="Pand afbeelding"
                 />
               )}
               <p className="font-semibold text-center">{pand.beschrijving}</p>
               <p className="text-center -mt-3 text-gray-400">{pand.gemeente}, €{pand.prijs}</p>
+              {pand.IsVerkochtVerhuurd && (
+                <p className="absolute top-2 right-2 text-red-700 bg-black font-semibold rounded-full"> VERKOCHT/VERHUURD! </p>
+              )}
             </div>
           ))}
         </div>

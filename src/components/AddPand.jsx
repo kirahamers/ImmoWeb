@@ -80,6 +80,23 @@ const AddPand = () => {
   };
 
   const handleButtonClick = async () => {
+    if (
+      !straat ||
+      !huisnummer ||
+      !postcode ||
+      !gemeente ||
+      !type ||
+      !regio ||
+      !prijs ||
+      !aantalKamers ||
+      !oppervlakte ||
+      !beschrijving ||
+      !fotoUrl
+    ) {
+      window.alert('Niet alle vereiste velden zijn ingevuld.');
+      return;
+    }
+
     const newPand = {
       straat,
       huisnummer,
@@ -155,24 +172,26 @@ const AddPand = () => {
         <h4 className="body-font font-poppins fw-bold">Pand toevoegen</h4>
         <p></p>
         <div className="form-group">
-          <p className="body-font font-poppins fw-bold mt-3">Straat</p> &nbsp;
+          <p className="body-font font-poppins fw-bold mt-3">Straat</p> <span className="required">*</span> &nbsp;
           <input
             className='border rounded-lg'
             size="100"
             type="text"
             value={straat}
             onChange={(event) => setStraat(event.target.value)}
+            required
           />
         </div>
         
         <div className="form-group">
-          <p className="body-font font-poppins fw-bold mt-3">Huisnummer</p> &nbsp;
+          <p className="body-font font-poppins fw-bold mt-3">Huisnummer</p> <span className="required">*</span> &nbsp;
           <input
             className='border rounded-lg'
             size="10"
             type="text"
             value={huisnummer}
             onChange={(event) => setHuisnummer(event.target.value)}
+            required
           />
           &nbsp;
           <p className="body-font font-poppins fw-bold mt-3">Bus</p> &nbsp;
@@ -186,31 +205,34 @@ const AddPand = () => {
         </div>
 
         <div className="form-group">
-          <p className="body-font font-poppins fw-bold mt-3">Postcode</p> &nbsp;
+          <p className="body-font font-poppins fw-bold mt-3">Postcode</p> <span className="required">*</span>&nbsp;
           <input
             className='border rounded-lg'
             size="10"
             type="text"
             value={postcode}
             onChange={handlePostcodeChange}
+            required
           />
           &nbsp;
-          <p className="body-font font-poppins fw-bold mt-3">Gemeente</p> &nbsp;
+          <p className="body-font font-poppins fw-bold mt-3">Gemeente</p> <span className="required">*</span>&nbsp;
           <input
             className='border rounded-lg'
             size="20"
             type="text"
             value={gemeente}
             onChange={(event) => setGemeente(event.target.value)}
+            required
           />
         </div>
 
         <div className="form-group">
-        <p className="body-font font-poppins fw-bold mt-3">Regio</p> &nbsp;
+        <p className="body-font font-poppins fw-bold mt-3">Regio</p> <span className="required">*</span>&nbsp;
         <select
           className="border rounded-lg"
           value={regio ? regio.id : ''}
           onChange={handleRegioChange}
+          required
         >
           <option value="">Selecteer een regio</option>
           {regioOptions.map((regioOption) => (
@@ -222,31 +244,34 @@ const AddPand = () => {
       </div>
 
         <div className="form-group">
-          <p className="body-font font-poppins fw-bold mt-3">Prijs</p> &nbsp;
+          <p className="body-font font-poppins fw-bold mt-3">Prijs</p> <span className="required">*</span>&nbsp;
           <input
            className='border rounded-lg'
             type="text"
             value={prijs}
             onChange={handlePrijsChange}
+            required
           />
         </div>
 
         <div className="form-group">
-          <p className="body-font font-poppins fw-bold mt-3">Oppervlakte</p> &nbsp;
+          <p className="body-font font-poppins fw-bold mt-3">Oppervlakte</p> <span className="required">*</span>&nbsp;
           <input
             className='border rounded-lg'
             type="text"
             value={oppervlakte}
             onChange={handleOppervlakteChange}
+            required
           />
         </div>
 
         <div className="form-group">
-          <p className="body-font font-poppins fw-bold mt-3">Type</p> &nbsp;
+          <p className="body-font font-poppins fw-bold mt-3">Type</p> <span className="required">*</span>&nbsp;
           <select
             className='border rounded-lg'
             value={type ? type.id : ''}
             onChange={handleTypeChange}
+            required
           >
             <option value=''>Selecteer een type</option>
             {typePanden.map((typePand) => (
@@ -258,35 +283,38 @@ const AddPand = () => {
         </div>
 
         <div className="form-group">
-          <p className="body-font font-poppins fw-bold mt-3">Aantal kamers</p> &nbsp;
+          <p className="body-font font-poppins fw-bold mt-3">Aantal kamers</p> <span className="required">*</span>&nbsp;
           <input
             className='border rounded-lg'
             size="2"
             type="text"
             value={aantalKamers}
             onChange={handleAantalKamersChange}
+            required
           />
         </div>
 
         <div className="form-group">
-          <p className="body-font font-poppins fw-bold mt-3">Beschrijving</p> &nbsp;
+          <p className="body-font font-poppins fw-bold mt-3">Beschrijving</p><span className="required">*</span> &nbsp;
           <textarea
             className='border rounded-lg'
             rows="4"
             cols="100"
             value={beschrijving}
             onChange={(event) => setBeschrijving(event.target.value)}
+            required
           />
         </div>
 
         <div className="form-group">
-          <p className="body-font font-poppins fw-bold mt-3">Foto URL</p> &nbsp;
+          <p className="body-font font-poppins fw-bold mt-3">Foto URL</p> <span className="required">*</span>&nbsp;
           <input
             type="text"
             className="border rounded-lg"
             size="100"
             value={fotoUrl}
             onChange={(event) => setFotoUrl(event.target.value)}
+            required
           />
         </div>
 
