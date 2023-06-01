@@ -11,6 +11,13 @@ const HuisDetailPage = () => {
   const [afbeeldingen, setAfbeeldingen] = useState([]);
   const [pandType, setPandType] = useState("");
   const [regio, setRegio] = useState("");
+  const [prijsMin, setPrijsMin] = useState(""); // Prijs filter minimum waarde
+  const [prijsMax, setPrijsMax] = useState(""); // Prijs filter maximum waarde
+  const [oppervlakteMin, setOppervlakteMin] = useState(""); // Oppervlakte filter minimum waarde
+  const [oppervlakteMax, setOppervlakteMax] = useState(""); // Oppervlakte filter maximum waarde
+  const [kamersMin, setKamersMin] = useState(""); // Aantal kamers filter minimum waarde
+  const [kamersMax, setKamersMax] = useState(""); // Aantal kamers filter maximum waarde
+
 
   useEffect(() => {
     fetchHuis();
@@ -19,7 +26,9 @@ const HuisDetailPage = () => {
 
   const fetchHuis = async () => {
     try {
-      const response = await axios.get(`/panden/${id}`);
+      let url = `/panden/${id}`;
+  
+      const response = await axios.get(url);
       setHuis(response.data);
       fetchPandType(response.data);
       fetchRegio(response.data);

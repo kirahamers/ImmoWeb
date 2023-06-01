@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "./AddPand.css";
 import NavigationAdmin from './NavigationAdmin';
+import { useNavigate } from 'react-router-dom';
 
 const AddPand = () => {
   const [type, setType] = useState('');
@@ -17,6 +18,8 @@ const AddPand = () => {
   const [oppervlakte, setOppervlakte] = useState('');
   const [beschrijving, setBeschrijving] = useState('');
   const [fotoUrl, setFotoUrl] = useState('');
+
+  const navigate = useNavigate();
 
   const handlePostcodeChange = (event) => {
     const parsedPostcode = parseInt(event.target.value);
@@ -116,6 +119,7 @@ const AddPand = () => {
         await createAfbeelding(newAfbeelding);
 
         console.log('Nieuw pand is aangemaakt:', createdPand);
+        navigate(-1);
       } else {
         console.error('Fout bij het aanmaken van het nieuwe pand:', response.status);
       }
@@ -202,20 +206,20 @@ const AddPand = () => {
         </div>
 
         <div className="form-group">
-      <p className="body-font font-poppins fw-bold mt-3">Regio</p> &nbsp;
-      <select
-        className='border rounded-lg'
-        value={regio}
-        onChange={handleRegioChange}
-      >
-        <option value=''>Selecteer een regio</option>
-        {regioOptions.map((regioOption) => (
-          <option key={regioOption.id} value={regioOption.id}>
-            {regioOption.naam}
-          </option>
-        ))}
-      </select>
-    </div>
+        <p className="body-font font-poppins fw-bold mt-3">Regio</p> &nbsp;
+        <select
+          className="border rounded-lg"
+          value={regio ? regio.id : ''}
+          onChange={handleRegioChange}
+        >
+          <option value="">Selecteer een regio</option>
+          {regioOptions.map((regioOption) => (
+            <option key={regioOption.id} value={regioOption.id}>
+              {regioOption.naam}
+            </option>
+          ))}
+        </select>
+      </div>
 
         <div className="form-group">
           <p className="body-font font-poppins fw-bold mt-3">Prijs</p> &nbsp;
@@ -241,7 +245,7 @@ const AddPand = () => {
           <p className="body-font font-poppins fw-bold mt-3">Type</p> &nbsp;
           <select
             className='border rounded-lg'
-            value={type}
+            value={type ? type.id : ''}
             onChange={handleTypeChange}
           >
             <option value=''>Selecteer een type</option>
@@ -286,7 +290,14 @@ const AddPand = () => {
           />
         </div>
 
-        <p></p>
+        {fotoUrl && (
+          <div className="form-group">
+            <p className="body-font font-poppins fw-bold mt-3">Preview</p> &nbsp;
+
+            <img src={fotoUrl} alt="Pand" style={{ maxWidth: "400px" }} />
+
+          </div>
+        )}
 
         <div className="form-group">
           <button
