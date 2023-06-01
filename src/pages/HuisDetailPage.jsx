@@ -28,6 +28,39 @@ const HuisDetailPage = () => {
     try {
       let url = `/panden/${id}`;
   
+            // Controleer prijsfilter
+            if (prijsMin || prijsMax) {
+              url += `?`;
+              if (prijsMin) {
+                url += `prijsMin=${prijsMin}`;
+              }
+              if (prijsMax) {
+                url += `${prijsMin ? '&' : ''}prijsMax=${prijsMax}`;
+              }
+            }
+        
+            // Controleer oppervlaktefilter
+            if (oppervlakteMin || oppervlakteMax) {
+              url += `${prijsMin || prijsMax ? '&' : '?'}`
+              if (oppervlakteMin) {
+                url += `oppervlakteMin=${oppervlakteMin}`;
+              }
+              if (oppervlakteMax) {
+                url += `${oppervlakteMin ? '&' : ''}oppervlakteMax=${oppervlakteMax}`;
+              }
+            }
+        
+            // Controleer kamersfilter
+            if (kamersMin || kamersMax) {
+              url += `${prijsMin || prijsMax || oppervlakteMin || oppervlakteMax ? '&' : '?'}`
+              if (kamersMin) {
+                url += `kamersMin=${kamersMin}`;
+              }
+              if (kamersMax) {
+                url += `${kamersMin ? '&' : ''}kamersMax=${kamersMax}`;
+              }
+            }
+            
       const response = await axios.get(url);
       setHuis(response.data);
       fetchPandType(response.data);
