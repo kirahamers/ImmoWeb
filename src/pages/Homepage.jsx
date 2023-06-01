@@ -116,7 +116,7 @@ const Homepage = () => {
         return false;
       }
       if (filters.locatie) {
-        const locatieFilter = filters.locatie.toLowerCase().trim();
+        const locatieFilter = filters.locatie;
         const gemeente = pand.gemeente.toLowerCase();
         const postcode = pand.postcode.toString();
   
@@ -157,6 +157,9 @@ const Homepage = () => {
               )}
               <p className="font-semibold text-center">{pand.beschrijving}</p>
               <p className="text-center -mt-3 text-gray-400">{pand.gemeente}, €{pand.prijs}</p>
+              {pand.IsVerkochtVerhuurd && (
+                <p className="absolute top-2 right-2 text-red-700 bg-black font-semibold rounded-full"> VERKOCHT/VERHUURD! </p>
+              )}
               <button
                 onClick={(event) => handleHeartClick(event, pand)}
                 className="absolute bottom-2 right-2"
