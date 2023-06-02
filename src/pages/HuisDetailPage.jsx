@@ -11,12 +11,6 @@ const HuisDetailPage = () => {
   const [afbeeldingen, setAfbeeldingen] = useState([]);
   const [pandType, setPandType] = useState("");
   const [regio, setRegio] = useState("");
-  const [prijsMin, setPrijsMin] = useState(""); // Prijs filter minimum waarde
-  const [prijsMax, setPrijsMax] = useState(""); // Prijs filter maximum waarde
-  const [oppervlakteMin, setOppervlakteMin] = useState(""); // Oppervlakte filter minimum waarde
-  const [oppervlakteMax, setOppervlakteMax] = useState(""); // Oppervlakte filter maximum waarde
-  const [kamersMin, setKamersMin] = useState(""); // Aantal kamers filter minimum waarde
-  const [kamersMax, setKamersMax] = useState(""); // Aantal kamers filter maximum waarde
 
 
   useEffect(() => {
@@ -26,42 +20,8 @@ const HuisDetailPage = () => {
 
   const fetchHuis = async () => {
     try {
-      let url = `/panden/${id}`;
-  
-            // Controleer prijsfilter
-            if (prijsMin || prijsMax) {
-              url += `?`;
-              if (prijsMin) {
-                url += `prijsMin=${prijsMin}`;
-              }
-              if (prijsMax) {
-                url += `${prijsMin ? '&' : ''}prijsMax=${prijsMax}`;
-              }
-            }
-        
-            // Controleer oppervlaktefilter
-            if (oppervlakteMin || oppervlakteMax) {
-              url += `${prijsMin || prijsMax ? '&' : '?'}`
-              if (oppervlakteMin) {
-                url += `oppervlakteMin=${oppervlakteMin}`;
-              }
-              if (oppervlakteMax) {
-                url += `${oppervlakteMin ? '&' : ''}oppervlakteMax=${oppervlakteMax}`;
-              }
-            }
-        
-            // Controleer kamersfilter
-            if (kamersMin || kamersMax) {
-              url += `${prijsMin || prijsMax || oppervlakteMin || oppervlakteMax ? '&' : '?'}`
-              if (kamersMin) {
-                url += `kamersMin=${kamersMin}`;
-              }
-              if (kamersMax) {
-                url += `${kamersMin ? '&' : ''}kamersMax=${kamersMax}`;
-              }
-            }
 
-      const response = await axios.get(url);
+      const response = await axios.get(`/panden/${id}`);
       setHuis(response.data);
       fetchPandType(response.data);
       fetchRegio(response.data);
@@ -71,11 +31,11 @@ const HuisDetailPage = () => {
     }
   };
   
-  const fetchAfbeeldingen = async (huisData) => {
-    if (huisData) {
+  const fetchAfbeeldingen = async (pand) => {
+    if (pand) {
       try {
         const response = await axios.get(`/afbeeldingen`);
-        const images = response.data.filter((image) => image.pandId === huisData.id);
+        const images = response.data.filter((image) => image.pandId === pand.id);
         setAfbeeldingen(images);
       } catch (error) {
         console.error(error);
@@ -83,9 +43,9 @@ const HuisDetailPage = () => {
     }
   };
 
-  const fetchRegio = async (data) => {
+  const fetchRegio = async (pand) => {
     try {
-      const response = await axios.get(`/regio/${data.regioId}`);
+      const response = await axios.get(`/regio/${pand.regioId}`);
       setRegio(response.data.naam);
     } catch (error) {
       console.error(error);
@@ -93,9 +53,9 @@ const HuisDetailPage = () => {
   };
   
 
-  const fetchPandType = async (data) => {
+  const fetchPandType = async (pand) => {
     try {
-      const response = await axios.get(`/typepanden/${data.typeId}`);
+      const response = await axios.get(`/typepanden/${pand.typeId}`);
       setPandType(response.data.naam);
     } catch (error) {
       console.error(error);

@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Filter = ({ applyFilters }) => {
-  const navigate = useNavigate();
 
   const [prijsMin, setPrijsMin] = useState('');
   const [prijsMax, setPrijsMax] = useState('');
@@ -17,7 +16,7 @@ const Filter = ({ applyFilters }) => {
   const handleSearch = () => {
     const filters = {};
 
-    // Voeg prijsfilter toe
+    //voeg prijsfilter toe
     if (prijsMin) {
       filters.prijsMin = prijsMin.trim();
     }
@@ -25,7 +24,7 @@ const Filter = ({ applyFilters }) => {
       filters.prijsMax = prijsMax.trim();
     }
 
-    // Voeg oppervlaktefilter toe
+    //voeg oppervlaktefilter toe
     if (oppervlakteMin) {
       filters.oppervlakteMin = oppervlakteMin.trim();
     }
@@ -33,7 +32,7 @@ const Filter = ({ applyFilters }) => {
       filters.oppervlakteMax = oppervlakteMax.trim();
     }
 
-    // Voeg kamersfilter toe
+    //voeg kamersfilter toe
     if (kamersMin) {
       filters.kamersMin = kamersMin.trim();
     }
@@ -44,7 +43,7 @@ const Filter = ({ applyFilters }) => {
     if (locatie) {
       filters.locatie = locatieFilter;
     }
-    // Roep de applyFilters-functie uit de Homepage-component aan om de filters toe te passen
+    //roep de applyFilters-functie uit de homepage component aan om de filters toe te passen
     applyFilters(filters);
   };
 
@@ -121,12 +120,6 @@ const Filter = ({ applyFilters }) => {
           </Dropdown.Menu>
         </Dropdown>
         &nbsp;
-        {/* <button
-          className="btn px-4 text-white bg-black rounded-full ml-5 h-10"
-          onClick={handleSearch}
-        >
-          Zoek
-        </button> */}
         <div className="flex-grow" />
         <div className="flex space-x-1">
         <input

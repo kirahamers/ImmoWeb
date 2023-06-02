@@ -7,7 +7,7 @@ const Navigation = () => {
 
   const handleHomeClick = () => {
     if (location.pathname === '/') {
-      window.location.reload(); // Laadt de pagina opnieuw
+      window.location.reload(); //laadt de pagina opnieuw
     }
   };
 

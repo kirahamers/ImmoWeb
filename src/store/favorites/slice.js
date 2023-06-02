@@ -14,26 +14,19 @@ const favoritesSlice = createSlice({
       }
     },
     remove: (state, action) => {
-      console.log("Favorites before removal:", state);
-
       const filteredFavorites = state.filter(
         (favorite) => favorite.id !== action.payload
       );
-      console.log("Filtered favorites:", filteredFavorites);
 
       return filteredFavorites;
     },
-
     clear: (state, action) => {
       state.favorites = [];
-    },
-    updateAfbeeldingen: (state, action) => {
-      state.afbeeldingen = action.payload;
     },
   },
 });
 
 export const { reducer } = favoritesSlice;
-export const { add, remove, updateAfbeeldingen } = favoritesSlice.actions;
+export const { add, remove } = favoritesSlice.actions;
 
 export default favoritesSlice.reducer;

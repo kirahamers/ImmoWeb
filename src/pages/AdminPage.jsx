@@ -1,45 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Filter from '../components/Filter';
-import { add } from '../store/favorites/slice';
-import { useDispatch } from 'react-redux';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import axios from "axios";
 import AdminFilter from '../components/AdminFilter';
 import NavigationAdmin from '../components/NavigationAdmin';
 
 const Adminpage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const [favorites, setFavorites] = useState([]);
-
-  const handleHeartClick = (event, h) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (favorites.includes(h.id)) {
-      const updatedFavorites = favorites.filter((id) => id !== h.id);
-      updateFavorites(updatedFavorites);
-    } else {
-      const updatedFavorites = [...favorites, h.id];
-      updateFavorites(updatedFavorites);
-      dispatch(add(h));
-    }
-  };
-
-  const updateFavorites = (updatedFavorites) => {
-    setFavorites(updatedFavorites);
-    localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-  };
 
   const [panden, setPanden] = useState([]);
-  const [typePanden, setTypePanden] = useState({});
   const [afbeeldingen, setAfbeeldingen] = useState({});
 
   useEffect(() => {
     fetchPanden();
-    fetchTypePanden();
     fetchAfbeeldingen();
   }, []);
 
@@ -52,31 +24,19 @@ const Adminpage = () => {
     }
   };
 
-  const fetchTypePanden = async () => {
-    try {
-      const response = await axios.get("/typepanden");
-      const types = response.data.reduce((acc, type) => {
-        acc[type.id] = type.naam;
-        return acc;
-      }, {});
-      setTypePanden(types);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const fetchAfbeeldingen = async () => {
     try {
       const response = await axios.get("/afbeeldingen");
-      const images = response.data.reduce((acc, image) => {
-        const pandId = image.pandId;
-        if (!acc[pandId]) {
-          acc[pandId] = [];
+      //accumulator -> soort dictionary
+      const afbeeldingen = response.data.reduce((afbeeldingenPerPand, afbeelding) => {
+        const pandId = afbeelding.pandId;
+        if (!afbeeldingenPerPand[pandId]) {
+          afbeeldingenPerPand[pandId] = [];
         }
-        acc[pandId].push(image.url);
-        return acc;
+        afbeeldingenPerPand[pandId].push(afbeelding.url);
+        return afbeeldingenPerPand;
       }, {});
-      setAfbeeldingen(images);
+      setAfbeeldingen(afbeeldingen);
     } catch (error) {
       console.error(error);
     }
@@ -97,7 +57,7 @@ const Adminpage = () => {
               {afbeeldingen[pand.id] && (
                 <img
                   className="w-full h-full object-cover"
-                  src={afbeeldingen[pand.id][0]} // Gebruik de eerste afbeelding van het pand
+                  src={afbeeldingen[pand.id][0]}
                   alt="Pand afbeelding"
                 />
               )}

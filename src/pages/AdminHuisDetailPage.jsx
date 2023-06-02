@@ -8,20 +8,19 @@ const AdminHuisDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [huis, setHuis] = useState(null);
+  const [pand, setPand] = useState(null);
   const [afbeeldingen, setAfbeeldingen] = useState([]);
   const [pandType, setPandType] = useState("");
   const [regio, setRegio] = useState("");
 
   useEffect(() => {
-    fetchHuis();
-    fetchAfbeeldingen();
+    fetchPand();
   }, []);
 
-  const fetchHuis = async () => {
+  const fetchPand = async () => {
     try {
       const response = await axios.get(`/panden/${id}`);
-      setHuis(response.data);
+      setPand(response.data);
       fetchPandType(response.data);
       fetchRegio(response.data);
       fetchAfbeeldingen(response.data);
@@ -30,42 +29,42 @@ const AdminHuisDetailPage = () => {
     }
   };
   
-  const fetchAfbeeldingen = async (huisData) => {
-    if (huisData) {
+  const fetchAfbeeldingen = async (pand) => {
+    if (pand) {
       try {
         const response = await axios.get(`/afbeeldingen`);
-        const images = response.data.filter((image) => image.pandId === huisData.id);
-        setAfbeeldingen(images);
+        const afbeeldingen = response.data.filter((afbeelding) => afbeelding.pandId === pand.id);
+        setAfbeeldingen(afbeeldingen);
       } catch (error) {
         console.error(error);
       }
     }
   };
   
-  const fetchRegio = async (data) => {
+  const fetchRegio = async (pand) => {
     try {
-      const response = await axios.get(`/regio/${data.regioId}`);
+      const response = await axios.get(`/regio/${pand.regioId}`);
       setRegio(response.data.naam);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const fetchPandType = async (data) => {
+  const fetchPandType = async (pand) => {
     try {
-      const response = await axios.get(`/typepanden/${data.typeId}`);
+      const response = await axios.get(`/typepanden/${pand.typeId}`);
       setPandType(response.data.naam);
     } catch (error) {
       console.error(error);
     }
   };
 
-  // door foreign key constraint moeten eerst de afbeeldingen verwijderd worden
+  //door foreign key constraint moeten eerst de afbeeldingen verwijderd worden
   const handleDelete = async () => {
     const confirmation = window.confirm("Ben je zeker dat je het pand wilt verwijderen?");
     if (confirmation) {
       try {
-        await deleteAfbeeldingen(huis.id); // Verwijder de afbeeldingen met het juiste pandId
+        await deleteAfbeeldingen(pand.id); //verwijdery de afbeeldingen met het juiste pandId
         await axios.delete(`/panden/${id}`);
         navigate(-1);
       } catch (error) {
@@ -84,7 +83,7 @@ const AdminHuisDetailPage = () => {
     }
   };
   
-  if (!huis) {
+  if (!pand) {
     return <div>Loading...</div>;
   }
   
@@ -93,15 +92,15 @@ const AdminHuisDetailPage = () => {
     <>
       <NavigationAdmin />
       <div className="flex flex-col items-center mt-8">
-        <h1 className="text-2xl mb-4 text-red-700">{huis.beschrijving}</h1>
+        <h1 className="text-2xl mb-4 text-red-700">{pand.beschrijving}</h1>
         {afbeeldingen.length > 0 && (
           <img
             className="w-70 h-64 rounded mb-4"
             src={afbeeldingen[0].url} // Gebruik de eerste afbeelding van het pand
-            alt={huis.beschrijving}
+            alt={pand.beschrijving}
           />
         )}
-        {huis.IsVerkochtVerhuurd && (
+        {pand.IsVerkochtVerhuurd && (
                 <p className="text-red-700 font-semibold rounded-full"> DIT PAND IS VERKOCHT/VERHUURD </p>
               )}
       <p></p>
@@ -109,34 +108,34 @@ const AdminHuisDetailPage = () => {
           <strong>Regio:</strong> {regio}
         </p>
         <p>
-          <strong>Straat:</strong> {huis.straat}
+          <strong>Straat:</strong> {pand.straat}
         </p>
         <p>
-          <strong>Huisnummer:</strong> {huis.huisnummer}
+          <strong>Huisnummer:</strong> {pand.huisnummer}
         </p>
         <p>
-          <strong>Bus:</strong> {huis.bus}
+          <strong>Bus:</strong> {pand.bus}
         </p>
         <p>
-          <strong>Postcode:</strong> {huis.postcode}
+          <strong>Postcode:</strong> {pand.postcode}
         </p>
         <p>
-          <strong>Gemeente:</strong> {huis.gemeente}
+          <strong>Gemeente:</strong> {pand.gemeente}
         </p>
         <p>
-          <strong>Prijs:</strong> €{huis.prijs}
+          <strong>Prijs:</strong> €{pand.prijs}
         </p>
         <p>
           <strong>Type:</strong> {pandType}
         </p>
         <p>
-          <strong>Aantal kamers:</strong> {huis.aantalKamers}
+          <strong>Aantal kamers:</strong> {pand.aantalKamers}
         </p>
         <p>
-          <strong>Oppervlakte:</strong> {huis.oppervlakte} m²
+          <strong>Oppervlakte:</strong> {pand.oppervlakte} m²
         </p>
         <p>
-          <strong>Beschrijving:</strong> {huis.beschrijving}
+          <strong>Beschrijving:</strong> {pand.beschrijving}
         </p>
         <Link to={`/admin/huizen/${id}/bewerken`} className="btn px-4 rounded-full">
           Bewerk pand

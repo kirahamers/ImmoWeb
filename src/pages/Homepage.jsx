@@ -8,34 +8,33 @@ import axios from "axios";
 import Navigation from '../components/Navigation';
 
 const Homepage = () => {
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const filters = Object.fromEntries(queryParams.entries());
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [favorites, setFavorites] = useState([]);
-  const [locatieFilter, setLocatieFilter] = useState(filters.locatie || '');
-  const [prevLocatieFilter, setPrevLocatieFilter] = useState(filters.locatie || '');
   const [allePanden, setAllePanden] = useState([]);
   const [panden, setPanden] = useState([]);
-  const [typePanden, setTypePanden] = useState({});
   const [afbeeldingen, setAfbeeldingen] = useState({});
 
-  const handleHeartClick = (event, h) => {
-    console.log('Favorites before click:', favorites);
-    console.log('Huis before click:', h);
+  useEffect(() => {
+    fetchPanden();
+    fetchAfbeeldingen();
+  }, []);
+
+  const handleHeartClick = (event, pand) => {
+    //zodat je niet naar de detailpagina gaat
     event.preventDefault();
     event.stopPropagation();
 
-    if (favorites.includes(h.id)) {
-      const updatedFavorites = favorites.filter((id) => id !== h.id);
+    if (favorites.includes(pand.id)) {
+      const updatedFavorites = favorites.filter((id) => id !== pand.id);
       updateFavorites(updatedFavorites);
     } else {
-      const updatedFavorites = [...favorites, h.id];
+      const updatedFavorites = [...favorites, pand.id];
       updateFavorites(updatedFavorites);
-      dispatch(add(h));
+      //redux add
+      dispatch(add(pand));
     }
   };
 
@@ -44,11 +43,6 @@ const Homepage = () => {
     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
 
-  useEffect(() => {
-    fetchPanden();
-    fetchTypePanden();
-    fetchAfbeeldingen();
-  }, []);
 
   const fetchPanden = async () => {
     try {
@@ -60,36 +54,19 @@ const Homepage = () => {
     }
   };
 
-  useEffect(() => {
-    // Filters toepassen wanneer locatie verandert
-    applyFilters({ ...filters, locatie: locatieFilter });
-  }, [locatieFilter]);
-
-  const fetchTypePanden = async () => {
-    try {
-      const response = await axios.get("/typepanden");
-      const types = response.data.reduce((acc, type) => {
-        acc[type.id] = type.naam;
-        return acc;
-      }, {});
-      setTypePanden(types);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const fetchAfbeeldingen = async () => {
     try {
       const response = await axios.get("/afbeeldingen");
-      const images = response.data.reduce((acc, image) => {
-        const pandId = image.pandId;
-        if (!acc[pandId]) {
-          acc[pandId] = [];
+      //accumulator -> soort dictionary
+      const afbeeldingen = response.data.reduce((afbeeldingenPerPand, afbeelding) => {
+        const pandId = afbeelding.pandId;
+        if (!afbeeldingenPerPand[pandId]) {
+          afbeeldingenPerPand[pandId] = [];
         }
-        acc[pandId].push(image.url);
-        return acc;
+        afbeeldingenPerPand[pandId].push(afbeelding.url);
+        return afbeeldingenPerPand;
       }, {});
-      setAfbeeldingen(images);
+      setAfbeeldingen(afbeeldingen);
     } catch (error) {
       console.error(error);
     }
@@ -97,6 +74,7 @@ const Homepage = () => {
 
   const applyFilters = (filters) => {
     const gefilterdePanden = allePanden.filter((pand) => {
+      //als er een filter is, maar het pand niet voldoet aan het filter, return false
       if (filters.prijsMin && pand.prijs < filters.prijsMin) {
         return false;
       }
@@ -130,10 +108,8 @@ const Homepage = () => {
     setPanden(gefilterdePanden);
   };
 
-  const handleSearch = (searchFilters) => {
-    // Herstel de lijst met panden en pas de filters toe
-    setLocatieFilter(searchFilters.locatie || '');
-    applyFilters(searchFilters);
+  const handleSearch = (zoekFilters) => {
+    applyFilters(zoekFilters);
   };
 
   return (

@@ -16,27 +16,25 @@ const FavoritesPage = () => {
     fetchAfbeeldingen();
   }, []);
 
-  const verwijderClick = (event, h) => {
+  const verwijderClick = (event, pand) => {
     event.preventDefault();
     event.stopPropagation();
-    console.log('Favorites before removal:', favoritesState);
-    dispatch(remove(h.id));
-    console.log('Favorites after removal:', favoritesState);
+    dispatch(remove(pand.id));
   };
 
   const fetchAfbeeldingen = async () => {
     try {
       const response = await axios.get("/afbeeldingen");
-      const images = response.data.reduce((acc, image) => {
-        const pandId = image.pandId;
-        if (!acc[pandId]) {
-          acc[pandId] = [];
+      //accumulator -> soort dictionary
+      const afbeeldingen = response.data.reduce((afbeeldingenPerPand, afbeelding) => {
+        const pandId = afbeelding.pandId;
+        if (!afbeeldingenPerPand[pandId]) {
+          afbeeldingenPerPand[pandId] = [];
         }
-        acc[pandId].push(image.url);
-        return acc;
+        afbeeldingenPerPand[pandId].push(afbeelding.url);
+        return afbeeldingenPerPand;
       }, {});
-      console.log("Fetched afbeeldingen:", images);
-      setAfbeeldingen(images);
+      setAfbeeldingen(afbeeldingen);
     } catch (error) {
       console.error(error);
     }
@@ -48,27 +46,27 @@ const FavoritesPage = () => {
     <>
       <Navigation />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 justify-items-center gap-4">
-        {favoritesState.map((h) => (
+        {favoritesState.map((pand) => (
           <div
-            onClick={() => navigate(`/huizen/${h.id}`)}
-            key={h.id}
+            onClick={() => navigate(`/huizen/${pand.id}`)}
+            key={pand.id}
             className="relative w-full h-auto flex flex-col justify-between overflow-clip align-middle rounded-md shadow-md cursor-pointer"
           >
-            {afbeeldingen[h.id] && (
+            {afbeeldingen[pand.id] && (
               <img
                 className="w-full h-3/4 object-cover"
-                src={afbeeldingen[h.id][0]}
+                src={afbeeldingen[pand.id][0]}
                 alt="Pand afbeelding"
               />
             )}
-            <p className="font-semibold text-center">{h.beschrijving}</p>
+            <p className="font-semibold text-center">{pand.beschrijving}</p>
             <p className="text-center -mt-3 text-gray-400">
-              {h.gemeente}, €{h.prijs}
+              {pand.gemeente}, €{pand.prijs}
             </p>
-            {h.IsVerkochtVerhuurd && (
+            {pand.IsVerkochtVerhuurd && (
                 <p className="absolute top-2 right-2 text-black bg-red-700 font-semibold rounded-full"> VERKOCHT/VERHUURD! </p>
               )}
-            <button onClick={(event) => verwijderClick(event, h)}>
+            <button onClick={(event) => verwijderClick(event, pand)}>
               Verwijder
             </button>
           </div>
