@@ -27,6 +27,7 @@ const EditPand = () => {
   useEffect(() => {
     fetchPand();
     fetchTypePanden();
+    fetchRegio();
   }, []);
 
   const fetchPand = async () => {
@@ -69,9 +70,6 @@ const EditPand = () => {
     }
   };  
 
-  useEffect(() => {
-    fetchTypePanden();
-  }, []);
 
   const fetchTypePanden = async () => {
     try {
@@ -89,10 +87,6 @@ const EditPand = () => {
     setType(selectedType); // Set the selectedType object directly
   };  
 
-  useEffect(() => {
-    fetchRegio();
-  }, []);
-  
   const fetchRegio = async () => {
     try {
       const response = await fetch('/regio');

@@ -18,8 +18,10 @@ const Homepage = () => {
   const [afbeeldingen, setAfbeeldingen] = useState({});
 
   useEffect(() => {
-    fetchPanden();
-    fetchAfbeeldingen();
+    const fetchData = async () => {
+      await Promise.all([fetchPanden(), fetchAfbeeldingen()]);
+    };
+    fetchData();
   }, []);
 
   const handleHeartClick = (event, pand) => {

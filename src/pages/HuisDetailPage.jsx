@@ -7,22 +7,22 @@ const HuisDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [huis, setHuis] = useState(null);
+  const [pand, setPand] = useState(null);
   const [afbeeldingen, setAfbeeldingen] = useState([]);
   const [pandType, setPandType] = useState("");
   const [regio, setRegio] = useState("");
 
 
   useEffect(() => {
-    fetchHuis();
+    fetchPand();
     fetchAfbeeldingen();
   }, []);
 
-  const fetchHuis = async () => {
+  const fetchPand = async () => {
     try {
 
       const response = await axios.get(`/panden/${id}`);
-      setHuis(response.data);
+      setPand(response.data);
       fetchPandType(response.data);
       fetchRegio(response.data);
       fetchAfbeeldingen(response.data);
@@ -62,7 +62,7 @@ const HuisDetailPage = () => {
     }
   };
 
-  if (!huis) {
+  if (!pand) {
     return <div>Loading...</div>;
   }
 
@@ -70,49 +70,49 @@ const HuisDetailPage = () => {
     <>
     <Navigation />
     <div className="flex flex-col items-center mt-8">
-    <h1 className="text-2xl mb-4 text-red-700"> {huis.beschrijving}</h1>
+    <h1 className="text-2xl mb-4 text-red-700"> {pand.beschrijving}</h1>
       {afbeeldingen.length > 0 && (
         <img
           className="w-70 h-64 rounded mb-4"
           src={afbeeldingen[0].url} // Gebruik de eerste afbeelding van het pand
-          alt={huis.beschrijving}
+          alt={pand.beschrijving}
         />
       )}
-      {huis.IsVerkochtVerhuurd && (
+      {pand.IsVerkochtVerhuurd && (
                 <p className="text-red-700 font-semibold rounded-full"> DIT PAND IS VERKOCHT/VERHUURD </p>
               )}
       <p>
           <strong>Regio:</strong> {regio}
       </p>
         <p>
-          <strong>Straat:</strong> {huis.straat}
+          <strong>Straat:</strong> {pand.straat}
         </p>
         <p>
-          <strong>Huisnummer:</strong> {huis.huisnummer}
+          <strong>Huisnummer:</strong> {pand.huisnummer}
         </p>
         <p>
-          <strong>Bus:</strong> {huis.bus}
+          <strong>Bus:</strong> {pand.bus}
         </p>
         <p>
-          <strong>Postcode:</strong> {huis.postcode}
+          <strong>Postcode:</strong> {pand.postcode}
         </p>
       <p>
-          <strong>Gemeente:</strong> {huis.gemeente}
+          <strong>Gemeente:</strong> {pand.gemeente}
         </p>
         <p>
-          <strong>Prijs:</strong> €{huis.prijs}
+          <strong>Prijs:</strong> €{pand.prijs}
         </p>
         <p>
           <strong>Type:</strong> {pandType}
         </p>
         <p>
-          <strong>Aantal kamers:</strong> {huis.aantalKamers}
+          <strong>Aantal kamers:</strong> {pand.aantalKamers}
         </p>
         <p>
-          <strong>Oppervlakte:</strong> {huis.oppervlakte} m²
+          <strong>Oppervlakte:</strong> {pand.oppervlakte} m²
         </p>
         <p>
-          <strong>Beschrijving:</strong> {huis.beschrijving}
+          <strong>Beschrijving:</strong> {pand.beschrijving}
         </p>
       <button
         onClick={() => navigate(-1)}

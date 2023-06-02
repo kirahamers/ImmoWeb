@@ -51,13 +51,14 @@ const AddPand = () => {
     setRegio(selectedRegio);
   };
 
-  useEffect(() => {
-    fetchTypePanden();
-  }, []);
+useEffect(() => {
+  const fetchData = async () => {
+    await Promise.all([fetchTypePanden(), fetchRegio()]);
+  };
 
-  useEffect(() => {
-    fetchRegio();
-  }, []);
+  fetchData();
+}, []);
+
   
   const fetchTypePanden = async () => {
     try {

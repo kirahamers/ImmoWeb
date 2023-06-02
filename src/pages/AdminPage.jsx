@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import AdminFilter from '../components/AdminFilter';
 import NavigationAdmin from '../components/NavigationAdmin';
+import { fetchPanden, fetchAfbeeldingen } from '../api/api';
 
 const Adminpage = () => {
   const navigate = useNavigate();
@@ -11,36 +12,15 @@ const Adminpage = () => {
   const [afbeeldingen, setAfbeeldingen] = useState({});
 
   useEffect(() => {
-    fetchPanden();
-    fetchAfbeeldingen();
-  }, []);
-
-  const fetchPanden = async () => {
-    try {
-      const response = await axios.get("/panden");
-      setPanden(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const fetchAfbeeldingen = async () => {
-    try {
-      const response = await axios.get("/afbeeldingen");
-      //accumulator -> soort dictionary
-      const afbeeldingen = response.data.reduce((afbeeldingenPerPand, afbeelding) => {
-        const pandId = afbeelding.pandId;
-        if (!afbeeldingenPerPand[pandId]) {
-          afbeeldingenPerPand[pandId] = [];
-        }
-        afbeeldingenPerPand[pandId].push(afbeelding.url);
-        return afbeeldingenPerPand;
-      }, {});
+    const fetchData = async () => {
+      const panden = await fetchPanden();
+      const afbeeldingen = await fetchAfbeeldingen();
+      setPanden(panden);
       setAfbeeldingen(afbeeldingen);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    };
+  
+    fetchData();
+  }, []);
 
   return (
     <>
