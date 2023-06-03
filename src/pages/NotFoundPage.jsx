@@ -1,7 +1,13 @@
 import React from "react";
+import Navigation from "../components/Navigation";
 
 const NotFoundPage = () => {
-  return <div>Pagina niet gevonden 😢</div>;
+  return (
+    <>
+  <Navigation></Navigation>
+  <div>Pagina niet gevonden 😢</div>
+  </>
+  )
 };
 
 export default NotFoundPage;

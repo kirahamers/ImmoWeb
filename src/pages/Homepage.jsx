@@ -45,7 +45,6 @@ const Homepage = () => {
     localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
   };
 
-
   const fetchPanden = async () => {
     try {
       const response = await axios.get("/panden");
@@ -58,20 +57,22 @@ const Homepage = () => {
 
   const fetchAfbeeldingen = async () => {
     try {
-      const response = await axios.get("/afbeeldingen");
-      //accumulator -> soort dictionary
-      const afbeeldingen = response.data.reduce((afbeeldingenPerPand, afbeelding) => {
-        const pandId = afbeelding.pandId;
-        if (!afbeeldingenPerPand[pandId]) {
-          afbeeldingenPerPand[pandId] = [];
-        }
-        afbeeldingenPerPand[pandId].push(afbeelding.url);
-        return afbeeldingenPerPand;
-      }, {});
-      setAfbeeldingen(afbeeldingen);
-    } catch (error) {
-      console.error(error);
-    }
+    const response = await axios.get("/afbeeldingen");
+    //afbeeldingen groeperen per pandid
+    const afbeeldingen = {};
+
+    response.data.forEach((afbeelding) => {
+      const pandId = afbeelding.pandId;
+      if (!afbeeldingen[pandId]) {
+        afbeeldingen[pandId] = [];
+      }
+      afbeeldingen[pandId].push(afbeelding.url);
+    });
+
+    setAfbeeldingen(afbeeldingen);
+  } catch (error) {
+    console.error(error);
+  }
   };
 
   const applyFilters = (filters) => {
@@ -95,6 +96,12 @@ const Homepage = () => {
       if (filters.kamersMax && pand.aantalKamers > filters.kamersMax) {
         return false;
       }
+      if (filters.regio && pand.regioId !== filters.regio.id) {
+        return false;
+      }
+      if (filters.type && pand.typeId !== filters.type.id) {
+        return false;
+      }
       if (filters.locatie) {
         const locatieFilter = filters.locatie;
         const gemeente = pand.gemeente.toLowerCase();
@@ -110,14 +117,10 @@ const Homepage = () => {
     setPanden(gefilterdePanden);
   };
 
-  const handleSearch = (zoekFilters) => {
-    applyFilters(zoekFilters);
-  };
-
   return (
     <>
       <Navigation />
-      <Filter applyFilters={handleSearch} />
+      <Filter applyFilters={applyFilters} />
       <div className="p-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 justify-items-center gap-4">
           {panden.map((pand) => (

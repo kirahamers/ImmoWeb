@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { fetchTypePanden, fetchRegio } from '../api/api';
 
 const Filter = ({ applyFilters }) => {
 
@@ -11,9 +13,38 @@ const Filter = ({ applyFilters }) => {
   const [oppervlakteMax, setOppervlakteMax] = useState('');
   const [kamersMin, setKamersMin] = useState('');
   const [kamersMax, setKamersMax] = useState('');
+  const [regios, setRegios] = useState([]);
+  const [typePanden, setTypePanden] = useState([]);
+  const [regio, setRegio] = useState('');
+  const [type, setType] = useState('');
   const [locatie, setLocatie] = useState('');
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const types = await fetchTypePanden();
+      const regios = await fetchRegio();
+      setRegios(regios);
+      setTypePanden(types);
+    };
+  
+    fetchData();
+  }, []);
+
+  const regioChange = (event) => {
+    const selectedRegioId = parseInt(event.target.value);
+    const selectedRegio = regios.find((regios) => regios.id === selectedRegioId);
+    setRegio(selectedRegio);
+  };
+  
+    const typeChange = (event) => {
+      const selectedTypeId = parseInt(event.target.value);
+      const selectedType = typePanden.find((typePand) => typePand.id === selectedTypeId);
+      setType(selectedType);
+    };  
+  
+
   const handleSearch = () => {
+    //maak een lege filters array aan waar alle voorwaarden inzitten
     const filters = {};
 
     //voeg prijsfilter toe
@@ -32,14 +63,24 @@ const Filter = ({ applyFilters }) => {
       filters.oppervlakteMax = oppervlakteMax.trim();
     }
 
-    //voeg kamersfilter toe
+    //voeg kamerfilter toe
     if (kamersMin) {
       filters.kamersMin = kamersMin.trim();
     }
     if (kamersMax) {
       filters.kamersMax = kamersMax.trim();
     }
-    const locatieFilter = locatie ? (isNaN(locatie) ? locatie.trim().toLowerCase() : Number(locatie)) : '';
+
+    if(type){
+      filters.type = type;
+    }
+
+    if(regio){
+      filters.regio = regio;
+    }
+
+    //voeg locatiefilter toe -> string of int?
+    const locatieFilter = locatie ? locatie.trim().toLowerCase() : '';
     if (locatie) {
       filters.locatie = locatieFilter;
     }
@@ -53,6 +94,24 @@ const Filter = ({ applyFilters }) => {
       <div className="flex space-x-4 text-white body-font font-poppins mt-2 h-10">
           Filter: &nbsp;
         </div>
+        <div className="form-group">
+        <select
+          className="bg-black text-white h-10 -mt-2.5 rounded-lg focus:outline-none"
+          value={type ? type.id : ''}
+          onChange={typeChange}
+          required
+        >
+          <option value="">Selecteer een type</option>
+          {typePanden.map((typePand) => (
+            <option key={typePand.id} value={typePand.id}>
+              {typePand.naam}
+            </option>
+          ))}
+        </select>
+      </div>
+      &nbsp;
+
+              &nbsp;
         <Dropdown className="border-left-0 ">
           <Dropdown.Toggle variant="dark" id="dropdown-basic">
             Prijs
@@ -120,6 +179,21 @@ const Filter = ({ applyFilters }) => {
           </Dropdown.Menu>
         </Dropdown>
         &nbsp;
+      <div className="form-group">
+        <select
+          className="bg-black text-white h-10 -mt-2.5 rounded-lg focus:outline-none"
+          value={regio.id}
+          onChange={regioChange}
+        >
+          <option value="">Selecteer een regio</option>
+          {regios.map((regio) => (
+            <option key={regio.id} value={regio.id}>
+              {regio.naam}
+            </option>
+          ))}
+        </select>
+      </div>
+      &nbsp;
         <div className="flex-grow" />
         <div className="flex space-x-1">
         <input

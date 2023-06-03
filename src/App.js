@@ -14,8 +14,8 @@ import AppLayout from "./navigation/AppLayout";
 import FavoritesPage from "./pages/FavoritesPage";
 import AdminPage from "./pages/AdminPage";
 import AdminHuisDetailPage from "./pages/AdminHuisDetailPage";
-import EditPand from "./components/EditPand";
 import AdminAddPandPage from "./pages/AdminAddPandPage";
+import AdminEditPandPage from "./pages/AdminEditPandPage";
 
 const browserRouter = createBrowserRouter([
   {
@@ -67,7 +67,7 @@ const browserRouter = createBrowserRouter([
       },
       {
         path: "/admin/huizen/:id/bewerken",
-        element: <EditPand />,
+        element: <AdminEditPandPage />,
       },
     ],
   },

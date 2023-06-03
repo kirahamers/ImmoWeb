@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AddPand = () => {
   const [type, setType] = useState('');
-  const [regioOptions, setRegioOptions] = useState([]);
+  const [regios, setRegios] = useState([]);
   const [typePanden, setTypePanden] = useState([]);
   const [regio, setRegio] = useState('');
   const [straat, setStraat] = useState('');
@@ -47,7 +47,7 @@ const AddPand = () => {
   };
 
   const regioChange = (event) => {
-    const selectedRegio = regioOptions.find((regioOption) => regioOption.id === parseInt(event.target.value));
+    const selectedRegio = regios.find((regioOption) => regioOption.id === parseInt(event.target.value));
     setRegio(selectedRegio);
   };
 
@@ -74,12 +74,11 @@ useEffect(() => {
     try {
       const response = await fetch('/regio');
       const data = await response.json();
-      setRegioOptions(data);
+      setRegios(data);
     } catch (error) {
       console.error('Fout bij het ophalen van regios:', error);
     }
   };
-  
 
   const handleButtonClick = async () => {
     if (
@@ -96,11 +95,6 @@ useEffect(() => {
       !fotoUrl
     ) {
       window.alert('Niet alle vereiste velden zijn ingevuld.');
-      return;
-    }
-
-    if(!fotoUrl.startsWith('https://') && !fotoUrl.startsWith('http://')) {
-      window.alert('De foto URL moet beginnen met http:// of https://');
       return;
     }
 
@@ -242,7 +236,7 @@ useEffect(() => {
           required
         >
           <option value="">Selecteer een regio</option>
-          {regioOptions.map((regioOption) => (
+          {regios.map((regioOption) => (
             <option key={regioOption.id} value={regioOption.id}>
               {regioOption.naam}
             </option>

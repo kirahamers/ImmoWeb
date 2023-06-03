@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import NavigationAdmin from "./NavigationAdmin";
+import NavigationAdmin from "../components/NavigationAdmin";
 
 const EditPand = () => {
   const { id } = useParams();

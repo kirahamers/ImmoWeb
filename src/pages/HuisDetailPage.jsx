@@ -6,7 +6,6 @@ import Navigation from "../components/Navigation";
 const HuisDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const [pand, setPand] = useState(null);
   const [afbeeldingen, setAfbeeldingen] = useState([]);
   const [pandType, setPandType] = useState("");
@@ -15,7 +14,6 @@ const HuisDetailPage = () => {
 
   useEffect(() => {
     fetchPand();
-    fetchAfbeeldingen();
   }, []);
 
   const fetchPand = async () => {
@@ -35,8 +33,8 @@ const HuisDetailPage = () => {
     if (pand) {
       try {
         const response = await axios.get(`/afbeeldingen`);
-        const images = response.data.filter((image) => image.pandId === pand.id);
-        setAfbeeldingen(images);
+        const afbeeldingen = response.data.filter((afbeelding) => afbeelding.pandId === afbeelding.id);
+        setAfbeeldingen(afbeeldingen);
       } catch (error) {
         console.error(error);
       }
