@@ -22,22 +22,22 @@ const AddPand = () => {
   const navigate = useNavigate();
 
   const postcodeChange = (event) => {
-    const postcode = parseInt(event.target.value);
+    const postcode = parseInt((event.target.value).replace(/[e-]/gi, '').slice(0,4));
     setPostcode(postcode);
   };
   
   const oppervlakteChange = (event) => {
-    const oppervlakte = parseInt(event.target.value);
+  const oppervlakte = parseInt((event.target.value).replace(/[e-]/gi, ''));
     setOppervlakte(oppervlakte);
   };
   
   const prijsChange = (event) => {
-    const prijs = parseInt(event.target.value);
+    const prijs = parseInt((event.target.value).replace(/[e-]/gi, ''));
     setPrijs(prijs);
   };
   
   const aantalKamersChange = (event) => {
-    const aantalKamers = parseInt(event.target.value);
+    const aantalKamers = parseInt((event.target.value).replace(/[e-]/gi, ''));
     setAantalKamers(aantalKamers);
   };
   
@@ -96,6 +96,11 @@ useEffect(() => {
       !fotoUrl
     ) {
       window.alert('Niet alle vereiste velden zijn ingevuld.');
+      return;
+    }
+
+    if(!fotoUrl.startsWith('https://') && !fotoUrl.startsWith('http://')) {
+      window.alert('De foto URL moet beginnen met http:// of https://');
       return;
     }
 
@@ -211,7 +216,7 @@ useEffect(() => {
           <input
             className='border rounded-lg'
             size="10"
-            type="text"
+            type="number"
             value={postcode}
             onChange={postcodeChange}
             required
@@ -249,7 +254,7 @@ useEffect(() => {
           <p className="body-font font-poppins fw-bold mt-3">Prijs</p> <span className="required">*</span>&nbsp;
           <input
            className='border rounded-lg'
-            type="text"
+            type="number"
             value={prijs}
             onChange={prijsChange}
             required
@@ -260,7 +265,7 @@ useEffect(() => {
           <p className="body-font font-poppins fw-bold mt-3">Oppervlakte</p> <span className="required">*</span>&nbsp;
           <input
             className='border rounded-lg'
-            type="text"
+            type="number"
             value={oppervlakte}
             onChange={oppervlakteChange}
             required
@@ -289,7 +294,7 @@ useEffect(() => {
           <input
             className='border rounded-lg'
             size="2"
-            type="text"
+            type="number"
             value={aantalKamers}
             onChange={aantalKamersChange}
             required

@@ -4,14 +4,8 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import { Provider } from "react-redux";
-import AdminFilter from "./components/AdminFilter";
-import Filter from "./components/Filter";
 import LogIn from "./components/LogIn";
 import LogOut from "./components/LogOut";
-import Navigation from "./components/Navigation";
-import NavigationAdmin from "./components/NavigationAdmin";
-import AddPand from "./components/AddPand";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Homepage from "./pages/Homepage";
 import HuisDetailPage from "./pages/HuisDetailPage";

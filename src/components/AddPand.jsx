@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import "./AddPand.css";
 import NavigationAdmin from './NavigationAdmin';
 import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
 
 const AddPand = () => {
   const [type, setType] = useState('');
@@ -18,6 +19,26 @@ const AddPand = () => {
   const [oppervlakte, setOppervlakte] = useState('');
   const [beschrijving, setBeschrijving] = useState('');
   const [fotoUrl, setFotoUrl] = useState('');
+
+  const validatieSchema = Yup.object().shape({
+    straat: Yup.string().required('Straat is verplicht'),
+    huisnummer: Yup.string()
+      .matches(/^[0-9]{4,}$/, 'Huisnummer moet minimaal 4 cijfers zijn')
+      .required('Huisnummer is verplicht'),
+    postcode: Yup.number().required('Postcode is verplicht'),
+    gemeente: Yup.string().required('Gemeente is verplicht'),
+    regio: Yup.object().shape({
+      id: Yup.string().required('Regio is verplicht'),
+    }),
+    prijs: Yup.number().required('Prijs is verplicht'),
+    oppervlakte: Yup.number().required('Oppervlakte is verplicht'),
+    type: Yup.object().shape({
+      id: Yup.string().required('Type is verplicht'),
+    }),
+    aantalKamers: Yup.number().required('Aantal kamers is verplicht'),
+    beschrijving: Yup.string().required('Beschrijving is verplicht'),
+    fotoUrl: Yup.string().required('Foto URL is verplicht'),
+  });
 
   const navigate = useNavigate();
 
@@ -80,22 +101,20 @@ const AddPand = () => {
   };
 
   const handleButtonClick = async () => {
-    if (
-      !straat ||
-      !huisnummer ||
-      !postcode ||
-      !gemeente ||
-      !type ||
-      !regio ||
-      !prijs ||
-      !aantalKamers ||
-      !oppervlakte ||
-      !beschrijving ||
-      !fotoUrl
-    ) {
-      window.alert('Niet alle vereiste velden zijn ingevuld.');
-      return;
-    }
+   try {
+    await validatieSchema.validate({
+      straat,
+      huisnummer,
+      postcode,
+      gemeente,
+      regio,
+      prijs,
+      aantalKamers,
+      oppervlakte,
+      type,
+      beschrijving,
+      fotoUrl,
+    });
 
     const newPand = {
       straat,
@@ -113,8 +132,8 @@ const AddPand = () => {
     };
 
     try {
-      // Maak het nieuwe pand aan
-      const response = await fetch('/panden', {
+      //maak het nieuwe pand aan
+      const response = fetch('/panden', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -123,17 +142,17 @@ const AddPand = () => {
       });
 
       if (response.ok) {
-        // Haal het aangemaakte pand op uit de respons
-        const createdPand = await response.json();
+        //haal het aangemaakte pand op uit de respons
+        const createdPand = response.json();
 
-        // Maak een nieuw afbeeldingsobject aan
+        //maak een nieuw afbeeldingsobject aan
         const newAfbeelding = {
           url: fotoUrl,
-          pandId: createdPand.id, // Gebruik de ID van het juist aangemaakte pand
+          pandId: createdPand.id, //gebruik de ID van het juist aangemaakte pand
         };
 
-        // Stuur het nieuwe afbeeldingsobject naar de server
-        await createAfbeelding(newAfbeelding);
+        //stuur het nieuwe afbeeldingsobject naar de server
+        createAfbeelding(newAfbeelding);
 
         console.log('Nieuw pand is aangemaakt:', createdPand);
         navigate(-1);
@@ -143,7 +162,11 @@ const AddPand = () => {
     } catch (error) {
       console.error('Fout bij het aanmaken van het nieuwe pand:', error);
     }
-  };
+  } catch (error) {
+    console.error('Fout bij het valideren van het formulier:', error);
+  }
+};
+
 
   const createAfbeelding = async (newAfbeelding) => {
     try {
@@ -209,7 +232,7 @@ const AddPand = () => {
           <input
             className='border rounded-lg'
             size="10"
-            type="text"
+            type="number"
             value={postcode}
             onChange={handlePostcodeChange}
             required
@@ -247,7 +270,7 @@ const AddPand = () => {
           <p className="body-font font-poppins fw-bold mt-3">Prijs</p> <span className="required">*</span>&nbsp;
           <input
            className='border rounded-lg'
-            type="text"
+            type="number"
             value={prijs}
             onChange={handlePrijsChange}
             required
@@ -258,7 +281,7 @@ const AddPand = () => {
           <p className="body-font font-poppins fw-bold mt-3">Oppervlakte</p> <span className="required">*</span>&nbsp;
           <input
             className='border rounded-lg'
-            type="text"
+            type="number"
             value={oppervlakte}
             onChange={handleOppervlakteChange}
             required
@@ -287,7 +310,7 @@ const AddPand = () => {
           <input
             className='border rounded-lg'
             size="2"
-            type="text"
+            type="numbers"
             value={aantalKamers}
             onChange={handleAantalKamersChange}
             required

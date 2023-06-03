@@ -52,7 +52,6 @@ const EditPand = () => {
       console.error(error);
     }
   };
-  
 
   const fetchAfbeeldingen = async (huisData) => {
     if (huisData) {
@@ -70,7 +69,6 @@ const EditPand = () => {
     }
   };  
 
-
   const fetchTypePanden = async () => {
     try {
       const response = await fetch('/typepanden');
@@ -81,12 +79,6 @@ const EditPand = () => {
     }
   };
 
-  const handleTypeChange = (event) => {
-    const selectedTypeId = parseInt(event.target.value);
-    const selectedType = typePanden.find((typePand) => typePand.id === selectedTypeId);
-    setType(selectedType); // Set the selectedType object directly
-  };  
-
   const fetchRegio = async () => {
     try {
       const response = await fetch('/regio');
@@ -96,13 +88,6 @@ const EditPand = () => {
       console.error('Fout bij het ophalen van regios:', error);
     }
   };
-  
-  const handleRegioChange = (event) => {
-  const selectedRegioId = parseInt(event.target.value);
-  const selectedRegio = regioOptions.find((regioOption) => regioOption.id === selectedRegioId);
-  setRegio({ id: selectedRegioId }); // Update to store as object with ID
-};
-
 
   const handleButtonClick = async () => {
     try {
@@ -123,38 +108,50 @@ const EditPand = () => {
         updatedAt: new Date().toISOString(),
         IsVerkochtVerhuurd,
       };
-
+      
       await axios.put(`/panden/${id}`, updatedPand);
-
+      
       navigate(`/adminhuizen/${id}`);
     } catch (error) {
       console.error(error);
     }
   };
+  
+  const regioChange = (event) => {
+  const selectedRegioId = parseInt(event.target.value);
+  const selectedRegio = regioOptions.find((regioOption) => regioOption.id === selectedRegioId);
+  setRegio({ id: selectedRegioId });
+};
 
-  const handlePostcodeChange = (event) => {
-    const { value } = event.target;
-    setPostcode(value);
+  const typeChange = (event) => {
+    const selectedTypeId = parseInt(event.target.value);
+    const selectedType = typePanden.find((typePand) => typePand.id === selectedTypeId);
+    setType(selectedType); // Set the selectedType object directly
+  };  
+
+  const postcodeChange = (event) => {
+    const postcode = parseInt((event.target.value).replace(/[e-]/gi, '').slice(0,4));
+    setPostcode(postcode);
+  };
+  
+  const prijsChange = (event) => {
+    const prijs = parseInt((event.target.value).replace(/[e-]/gi, ''));
+    setPrijs(prijs);
   };
 
-  const handlePrijsChange = (event) => {
-    const { value } = event.target;
-    setPrijs(value);
+  const oppervlakteChange = (event) => {
+    const oppervlakte = parseInt((event.target.value).replace(/[e-]/gi, ''));
+    setOppervlakte(oppervlakte);
   };
 
-  const handleOppervlakteChange = (event) => {
-    const { value } = event.target;
-    setOppervlakte(value);
+  const aantalKamersChange = (event) => {
+    const aantalKamers = parseInt((event.target.value).replace(/[e-]/gi, ''));
+    setAantalKamers(aantalKamers);
   };
 
-  const handleAantalKamersChange = (event) => {
-    const { value } = event.target;
-    setAantalKamers(value);
-  };
-
-  const handleFotoUrlChange = (event) => {
-    const { value } = event.target;
-    setFotoUrl(value);
+  const fotoUrlChange = (event) => {
+    const fotoUrl = event.target.value;
+    setFotoUrl(fotoUrl);
   };
 
   return (
@@ -211,7 +208,7 @@ const EditPand = () => {
             size="10"
             type="text"
             value={postcode}
-            onChange={handlePostcodeChange}
+            onChange={postcodeChange}
           />
           &nbsp;
           <p className="body-font font-poppins fw-bold mt-3">Gemeente</p> &nbsp;
@@ -229,7 +226,7 @@ const EditPand = () => {
           <select
             className="border rounded-lg"
             value={regio.id}
-            onChange={handleRegioChange}
+            onChange={regioChange}
             >
             <option value="">Selecteer een regio</option>
             {regioOptions.map((regioOption) => (
@@ -246,7 +243,7 @@ const EditPand = () => {
             className="border rounded-lg"
             type="text"
             value={prijs}
-            onChange={handlePrijsChange}
+            onChange={prijsChange}
           />
         </div>
 
@@ -256,7 +253,7 @@ const EditPand = () => {
             className="border rounded-lg"
             type="text"
             value={oppervlakte}
-            onChange={handleOppervlakteChange}
+            onChange={oppervlakteChange}
           />
         </div>
 
@@ -265,7 +262,7 @@ const EditPand = () => {
           <select
             className="border rounded-lg"
             value={type.id}
-            onChange={handleTypeChange}
+            onChange={typeChange}
             >
             <option value="">Selecteer een type</option>
             {typePanden.map((typePand) => (
@@ -283,7 +280,7 @@ const EditPand = () => {
             size="2"
             type="text"
             value={aantalKamers}
-            onChange={handleAantalKamersChange}
+            onChange={aantalKamersChange}
           />
         </div>
 
@@ -306,7 +303,7 @@ const EditPand = () => {
             size="100"
             name="fotoUrl"
             value={fotoUrl}
-            onChange={handleFotoUrlChange}
+            onChange={fotoUrlChange}
           />
         </div>
 
